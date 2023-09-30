@@ -11,6 +11,7 @@ from sklearn.ensemble import IsolationForest
 
 # Define the Streamlit app
 st.title("Air Passenger Traffic Analysis")
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # Upload dataset
 uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
