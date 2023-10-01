@@ -30,14 +30,10 @@ if uploaded_file is not None:
         result = adfuller(passengers)
         adf_statistic = result[0]
         p_value = result[1]
-        critical_values = result[4]
 
         st.subheader("ADF Test for Stationarity")
         st.write('ADF Statistic:', adf_statistic)
         st.write('p-value:', p_value)
-        st.write('Critical Values:')
-        for key, value in critical_values.items():
-            st.write(f'{key}%:', value)
 
     # Function to plot time series
     def plot_time_series_with_index(time_index, passengers, title):
@@ -85,6 +81,16 @@ if uploaded_file is not None:
         st.pyplot()
 
         clean_data = data[data['anomaly'] != -1]
+
+        st.subheader("Data Without Anomalies")
+        st.write(clean_data.head())
+
+        plt.figure(figsize=(10, 6))
+        plt.plot(clean_data['Month'], clean_data['#Passengers'], label='Clean Data')
+        plt.xlabel('')
+        plt.ylabel('')
+        plt.title('Data Without Anomalies')
+        st.pyplot()
 
     # Function to fit and forecast using ARIMA
     def fit_forecast_arima(passengers):
