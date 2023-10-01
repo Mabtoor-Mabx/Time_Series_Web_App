@@ -20,7 +20,10 @@ if uploaded_file is not None:
 
     # Data Preprocessing
     st.subheader("Data Overview")
-    st.write(data.head())
+    data_display = data.head().copy()
+    data_display.columns = ['1', '2']
+    data_display.index = ['' for _ in range(len(data_display))]  # Set index names to empty strings
+    st.write(data_display)
 
     # Function to check stationarity using ADF Test
     def check_stationarity(passengers):
