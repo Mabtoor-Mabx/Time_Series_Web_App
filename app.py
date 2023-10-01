@@ -10,7 +10,7 @@ from statsmodels.tsa.arima.model import ARIMA
 from sklearn.ensemble import IsolationForest
 
 # Define the Streamlit app
-st.title("Air Passenger Traffic Analysis")
+st.title("Anomaly Detection and Time Series Forecasting Web Application")
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # Upload dataset
@@ -42,7 +42,7 @@ if uploaded_file is not None:
         plt.figure(figsize=(10, 6))
         plt.plot(time_index, passengers)
         plt.xlabel('Month')
-        plt.ylabel('Number of Passengers')
+        plt.ylabel('')
         plt.title(title)
         st.pyplot()
 
@@ -69,13 +69,19 @@ if uploaded_file is not None:
         outlier_detector.fit(passengers.values.reshape(-1, 1))
         anomalies = outlier_detector.predict(passengers.values.reshape(-1, 1))
         data['anomaly'] = anomalies
-        clean_data = data[data['anomaly'] != -1]
 
         st.subheader("Anomaly Detection and Removal")
         st.write("Data with Anomalies:")
-        plot_time_series_with_index(data['Month'], passengers, "Data with Anomalies")
-        st.write("Data without Anomalies:")
-        plot_time_series_with_index(clean_data['Month'], clean_data['#Passengers'], "Data without Anomalies")
+        plt.figure(figsize=(10, 6))
+        plt.plot(data['Month'], passengers, label='Original')
+        plt.scatter(data[data['anomaly'] == -1]['Month'], passengers[data['anomaly'] == -1], color='r', label='Anomaly')
+        plt.xlabel('Month')
+        plt.ylabel('')
+        plt.title('Data with Anomalies')
+        plt.legend()
+        st.pyplot()
+
+        clean_data = data[data['anomaly'] != -1]
 
     # Function to fit and forecast using ARIMA
     def fit_forecast_arima(passengers):
@@ -84,17 +90,13 @@ if uploaded_file is not None:
         num_periods = 12
         forecast_index = pd.date_range(start=data['Month'].iloc[-1], periods=num_periods + 1, freq='M')[1:]
         forecast = model_fit.predict(start=len(passengers), end=len(passengers) + num_periods - 1)
-
         st.subheader("ARIMA Model Forecast")
-        st.write("Original Data:")
-        plot_time_series_with_index(data['Month'], passengers, "Original Data")
-        st.write("ARIMA Forecast:")
         plt.figure(figsize=(10, 6))
         plt.plot(data['Month'], passengers, label='Original')
         plt.plot(forecast_index, forecast, label='Forecast')
         plt.xlabel('Month')
-        plt.ylabel('Number of Passengers')
-        plt.title('Air Passenger Traffic with Forecast')
+        plt.ylabel('')
+        plt.title('Data with Forecast')
         plt.legend()
         st.pyplot()
 
