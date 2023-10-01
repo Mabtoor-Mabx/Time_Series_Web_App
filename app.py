@@ -70,7 +70,7 @@ if uploaded_file is not None:
         data['anomaly'] = anomalies
 
         st.subheader("Anomaly Detection and Removal")
-        st.write("Data with Anomalies:")
+        st.subheader("Data with Anomalies:")
         plt.figure(figsize=(10, 6))
         plt.plot(data['Month'], passengers, label='Original')
         plt.scatter(data[data['anomaly'] == -1]['Month'], passengers[data['anomaly'] == -1], color='r', label='Anomaly')
@@ -83,8 +83,6 @@ if uploaded_file is not None:
         clean_data = data[data['anomaly'] != -1]
 
         st.subheader("Data Without Anomalies")
-        st.write(clean_data.head())
-
         plt.figure(figsize=(10, 6))
         plt.plot(clean_data['Month'], clean_data['#Passengers'], label='Clean Data')
         plt.xlabel('')
